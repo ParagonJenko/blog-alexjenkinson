@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { Link, Route, Routes, useParams } from 'react-router-dom';
 import remarkGfm from 'remark-gfm';
 import styled from 'styled-components';
+import { loadMarkdownFiles } from '../utils/markdown';
 
 interface BlogPost {
 	id: string;
@@ -308,104 +309,28 @@ const Blog = () => {
 	useEffect(() => {
 		const loadBlogPosts = async () => {
 			try {
-				// Load both .md and .mdx files
-				const mdxFiles = import.meta.glob('/src/content/blog/**/*.mdx', {
-					as: 'raw',
-					eager: true,
-				});
-				const mdFiles = import.meta.glob('/src/content/blog/**/*.md', {
-					as: 'raw',
-					eager: true,
+				const contents = await loadMarkdownFiles('blog', {
+					arrayFields: ['tags'],
+					numberFields: ['series_order'],
+					booleanFields: ['draft'],
 				});
 
-				const allFiles = { ...mdFiles, ...mdxFiles };
+				const loadedPosts = contents
+					.map((content) => ({
+						id: content.slug,
+						title: content.frontmatter.title || content.slug,
+						content: content.content,
+						date: content.frontmatter.date || new Date().toISOString(),
+						slug: content.slug,
+						tags: content.frontmatter.tags || [],
+						series: content.frontmatter.series,
+						series_order: content.frontmatter.series_order,
+						summary: content.frontmatter.summary,
+						draft: content.frontmatter.draft || false,
+					}))
+					.filter((post) => !post.draft);
 
-				const loadedPosts = Object.entries(allFiles).map(
-					([filepath, content]) => {
-						// Parse frontmatter and content
-						const [, frontmatter = '', ...contentParts] = content.split('---');
-						const mainContent = contentParts.join('---').trim();
-
-						// Parse frontmatter
-						const frontmatterLines = frontmatter.trim().split('\n');
-						const metadata: Record<string, any> = {};
-
-						frontmatterLines.forEach((line) => {
-							const [key, ...valueParts] = line
-								.split(':')
-								.map((part) => part.trim());
-							if (key && valueParts.length) {
-								let value = valueParts.join(':').trim();
-
-								// Remove quotes if present
-								if (value.startsWith("'") && value.endsWith("'")) {
-									value = value.slice(1, -1);
-								}
-
-								switch (key) {
-									case 'tags':
-										// Parse array
-										metadata[key] =
-											value.startsWith('[') && value.endsWith(']')
-												? value
-														.slice(1, -1)
-														.split(',')
-														.map((v) => v.trim().replace(/['"]/g, ''))
-												: [];
-										break;
-									case 'series_order':
-										// Parse number
-										metadata[key] = !isNaN(Number(value))
-											? Number(value)
-											: undefined;
-										break;
-									case 'draft':
-										// Parse boolean
-										metadata[key] = value === 'true';
-										break;
-									default:
-										metadata[key] = value;
-								}
-							}
-						});
-
-						// Generate slug from filepath
-						const pathParts = filepath.split('/');
-						const filename = pathParts[pathParts.length - 1]
-							.replace('.mdx', '')
-							.replace('.md', '');
-						const slug = filename.toLowerCase();
-
-						// Extract date from filename if it exists (format: YYYY-MM-DD-*)
-						let date = metadata.date;
-						const dateMatch = filename.match(/^(\d{4}-\d{2}-\d{2})/);
-						if (dateMatch && !date) {
-							date = dateMatch[1];
-						}
-
-						return {
-							id: filepath,
-							title: metadata.title || filename,
-							content: mainContent,
-							date: date || new Date().toISOString(),
-							slug,
-							tags: metadata.tags || [],
-							series: metadata.series,
-							series_order: metadata.series_order,
-							summary: metadata.summary,
-							draft: metadata.draft || false,
-						};
-					}
-				);
-
-				// Filter out draft posts and sort by date
-				setPosts(
-					loadedPosts
-						.filter((post) => !post.draft)
-						.sort(
-							(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-						)
-				);
+				setPosts(loadedPosts);
 			} catch (error) {
 				console.error('Error loading blog posts:', error);
 			}

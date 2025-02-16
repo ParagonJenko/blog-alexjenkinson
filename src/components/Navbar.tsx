@@ -2,20 +2,17 @@ import { useState } from 'react';
 import { AiOutlineHome } from 'react-icons/ai';
 import { BiLinkAlt } from 'react-icons/bi';
 import { BsPersonVcard } from 'react-icons/bs';
-import { FaBlog } from 'react-icons/fa';
+import { FaBlog, FaCode } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ThemeName } from '../themes';
-import ThemeSwitcher from './ThemeSwitcher';
 
 interface NavbarProps {
-	currentTheme: ThemeName;
-	setTheme: (theme: ThemeName) => void;
+	// Remove unused props
 }
 
 const Nav = styled.nav`
 	background: ${({ theme }) => theme.background};
-	padding: 0.5rem 0;
+	padding: 0.75rem 0;
 	position: fixed;
 	width: 100%;
 	top: 0;
@@ -29,9 +26,14 @@ const NavContainer = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 0 1rem;
+	padding: 0 2rem;
 	width: 100%;
 	position: relative;
+	min-height: 2.5rem;
+
+	@media (max-width: 768px) {
+		padding: 0 1rem;
+	}
 `;
 
 const NavLinks = styled.div<{ $isOpen: boolean }>`
@@ -43,6 +45,8 @@ const NavLinks = styled.div<{ $isOpen: boolean }>`
 		position: absolute;
 		left: 50%;
 		transform: translateX(-50%);
+		width: auto;
+		max-width: none; /* Remove the space restriction */
 	}
 
 	@media (max-width: 768px) {
@@ -111,12 +115,13 @@ const HamburgerButton = styled.button<{ $isOpen: boolean }>`
 	}
 `;
 
-const Navbar = ({ currentTheme, setTheme }: NavbarProps) => {
+const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const navItems = [
 		{ to: '/', icon: <AiOutlineHome />, label: 'Home' },
 		{ to: '/blog', icon: <FaBlog />, label: 'Blog' },
+		{ to: '/projects', icon: <FaCode />, label: 'Projects' },
 		{ to: '/about', icon: <BsPersonVcard />, label: 'About' },
 		{ to: '/links', icon: <BiLinkAlt />, label: 'Links' },
 	];
@@ -143,7 +148,6 @@ const Navbar = ({ currentTheme, setTheme }: NavbarProps) => {
 						</NavLink>
 					))}
 				</NavLinks>
-				<ThemeSwitcher currentTheme={currentTheme} setTheme={setTheme} />
 			</NavContainer>
 		</Nav>
 	);
