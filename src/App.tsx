@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import Navbar from './components/Navbar';
@@ -7,15 +7,10 @@ import About from './pages/About';
 import Blog from './pages/Blog';
 import Home from './pages/Home';
 import Links from './pages/Links';
-import { astrologyTheme, falloutTheme, tarkovTheme } from './themes';
+import { ThemeName, getTheme } from './themes';
 
-type ThemeType = 'fallout' | 'astrology' | 'tarkov';
-
-const themes = {
-	fallout: falloutTheme,
-	astrology: astrologyTheme,
-	tarkov: tarkovTheme,
-} as const;
+const DEFAULT_THEME: ThemeName = 'dos';
+const THEME_STORAGE_KEY = 'preferred-theme';
 
 const AppContainer = styled.div`
 	display: flex;
@@ -39,11 +34,18 @@ const PageContainer = styled.div`
 `;
 
 function App() {
-	const [currentTheme, setCurrentTheme] = useState<ThemeType>('fallout');
+	const [currentTheme, setCurrentTheme] = useState<ThemeName>(() => {
+		const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+		return (savedTheme as ThemeName) || DEFAULT_THEME;
+	});
+
+	useEffect(() => {
+		localStorage.setItem(THEME_STORAGE_KEY, currentTheme);
+	}, [currentTheme]);
 
 	return (
-		<ThemeProvider theme={themes[currentTheme]}>
-			<GlobalStyles theme={themes[currentTheme]} />
+		<ThemeProvider theme={getTheme(currentTheme)}>
+			<GlobalStyles theme={getTheme(currentTheme)} />
 			<Router>
 				<AppContainer>
 					<Navbar currentTheme={currentTheme} setTheme={setCurrentTheme} />
