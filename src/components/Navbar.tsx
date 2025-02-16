@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ThemeName, getAllThemeNames } from '../themes';
+import { ThemeName } from '../themes';
+import ThemeSwitcher from './ThemeSwitcher';
 
 interface NavbarProps {
 	currentTheme: ThemeName;
@@ -76,33 +77,6 @@ const NavLinks = styled.div<{ $isOpen: boolean }>`
 	}
 `;
 
-const ThemeSelector = styled.select`
-	margin-left: auto;
-	background: ${({ theme }) => `${theme.secondary}cc`};
-	color: ${({ theme }) => theme.text};
-	border: 1px solid ${({ theme }) => theme.border};
-	padding: 0.5rem;
-	border-radius: 4px;
-	cursor: pointer;
-	font-family: ${({ theme }) => theme.font};
-	transition: all 0.3s ease;
-	z-index: 1;
-
-	&:hover {
-		border-color: ${({ theme }) => theme.accent};
-		box-shadow: 0 0 10px ${({ theme }) => theme.accent}66;
-	}
-
-	option {
-		background: ${({ theme }) => theme.secondary};
-		color: ${({ theme }) => theme.text};
-	}
-
-	@media (max-width: 768px) {
-		margin-left: 1rem;
-	}
-`;
-
 const HamburgerButton = styled.button<{ $isOpen: boolean }>`
 	display: none;
 	background: none;
@@ -144,7 +118,6 @@ const HamburgerButton = styled.button<{ $isOpen: boolean }>`
 
 const Navbar = ({ currentTheme, setTheme }: NavbarProps) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const themeNames = getAllThemeNames();
 
 	const toggleMenu = () => {
 		setIsOpen(!isOpen);
@@ -152,10 +125,6 @@ const Navbar = ({ currentTheme, setTheme }: NavbarProps) => {
 
 	const closeMenu = () => {
 		setIsOpen(false);
-	};
-
-	const formatThemeName = (name: string): string => {
-		return name.charAt(0).toUpperCase() + name.slice(1) + ' Theme';
 	};
 
 	return (
@@ -180,16 +149,7 @@ const Navbar = ({ currentTheme, setTheme }: NavbarProps) => {
 						Links
 					</Link>
 				</NavLinks>
-				<ThemeSelector
-					value={currentTheme}
-					onChange={(e) => setTheme(e.target.value as ThemeName)}
-				>
-					{themeNames.map((theme) => (
-						<option key={theme} value={theme}>
-							{formatThemeName(theme)}
-						</option>
-					))}
-				</ThemeSelector>
+				<ThemeSwitcher currentTheme={currentTheme} setTheme={setTheme} />
 			</NavContainer>
 		</Nav>
 	);
