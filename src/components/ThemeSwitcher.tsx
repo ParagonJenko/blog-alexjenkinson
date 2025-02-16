@@ -12,67 +12,54 @@ interface ThemeSwitcherProps {
 
 const ThemeIconsContainer = styled.div`
 	display: flex;
-	gap: 1rem;
+	gap: 0;
 	align-items: center;
-	margin-left: auto;
-
-	@media (max-width: 768px) {
-		margin-left: 1rem;
-	}
 `;
 
 const ThemeIcon = styled.button<{ $isActive: boolean }>`
-	background: none;
-	border: 2px solid
-		${({ theme, $isActive }) => ($isActive ? theme.accent : 'transparent')};
-	color: ${({ theme }) => theme.text};
-	width: 2.5rem;
-	height: 2.5rem;
-	border-radius: 50%;
+	background: ${({ theme, $isActive }) =>
+		$isActive ? theme.text : theme.background};
+	color: ${({ theme, $isActive }) =>
+		$isActive ? theme.background : theme.text};
+	border: 1px solid ${({ theme }) => theme.text};
+	padding: 0.5rem 1rem;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	gap: 0.5rem;
 	cursor: pointer;
-	transition: all 0.3s ease;
-	padding: 0.5rem;
-	position: relative;
+	font-family: ${({ theme }) => theme.font};
+	text-transform: uppercase;
+	font-size: 0.9rem;
+
+	&:not(:last-child) {
+		border-right: none;
+	}
 
 	&:hover {
-		border-color: ${({ theme }) => theme.accent};
-		transform: scale(1.1);
-		color: ${({ theme }) => theme.accent};
-	}
-
-	&:after {
-		content: '';
-		position: absolute;
-		top: -2px;
-		left: -2px;
-		right: -2px;
-		bottom: -2px;
-		border-radius: 50%;
-		background: ${({ theme }) => theme.accent};
-		opacity: 0;
-		transition: opacity 0.3s ease;
-		z-index: -1;
-	}
-
-	&:hover:after {
-		opacity: 0.1;
+		background: ${({ theme }) => theme.text};
+		color: ${({ theme }) => theme.background};
 	}
 
 	svg {
-		width: 100%;
-		height: 100%;
+		width: 1rem;
+		height: 1rem;
+	}
+
+	@media (max-width: 768px) {
+		padding: 0.25rem;
+
+		span {
+			display: none;
+		}
 	}
 `;
 
 const ThemeSwitcher = ({ currentTheme, setTheme }: ThemeSwitcherProps) => {
 	const themes: { name: ThemeName; icon: JSX.Element; label: string }[] = [
-		{ name: 'fallout', icon: <FaSkull />, label: 'Fallout Theme' },
-		{ name: 'astrology', icon: <GiStarsStack />, label: 'Astrology Theme' },
-		{ name: 'tarkov', icon: <IoMdCompass />, label: 'Tarkov Theme' },
-		{ name: 'dos', icon: <BsTerminalFill />, label: 'DOS Terminal Theme' },
+		{ name: 'dos', icon: <BsTerminalFill />, label: 'DOS' },
+		{ name: 'fallout', icon: <FaSkull />, label: 'Fall' },
+		{ name: 'astrology', icon: <GiStarsStack />, label: 'Astr' },
+		{ name: 'tarkov', icon: <IoMdCompass />, label: 'Tark' },
 	];
 
 	return (
@@ -82,10 +69,10 @@ const ThemeSwitcher = ({ currentTheme, setTheme }: ThemeSwitcherProps) => {
 					key={name}
 					$isActive={currentTheme === name}
 					onClick={() => setTheme(name)}
-					title={label}
-					aria-label={label}
+					title={`${label} Theme`}
 				>
 					{icon}
+					<span>{label}</span>
 				</ThemeIcon>
 			))}
 		</ThemeIconsContainer>
