@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useState } from 'react';
 
 interface NavbarProps {
   currentTheme: 'fallout' | 'astrology' | 'tarkov';
@@ -28,12 +29,31 @@ const NavContainer = styled.div`
   position: relative;
 `;
 
-const NavLinks = styled.div`
+const NavLinks = styled.div<{ $isOpen: boolean }>`
   display: flex;
   gap: 2rem;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  
+  @media (min-width: 769px) {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 72px; // Height of navbar
+    left: 0;
+    right: 0;
+    background-color: ${({ theme }) => `${theme.secondary}ee`};
+    backdrop-filter: blur(5px);
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+    transform: translateY(${({ $isOpen }) => ($isOpen ? '0' : '-100vh')});
+    transition: transform 0.3s ease-in-out;
+    border-bottom: 1px solid ${({ theme }) => theme.border};
+  }
   
   a {
     position: relative;
@@ -76,17 +96,75 @@ const ThemeSelector = styled.select`
     background: ${({ theme }) => theme.secondary};
     color: ${({ theme }) => theme.text};
   }
+
+  @media (max-width: 768px) {
+    margin-left: 1rem;
+  }
+`;
+
+const HamburgerButton = styled.button<{ $isOpen: boolean }>`
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 2;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  span {
+    display: block;
+    width: 2rem;
+    height: 2px;
+    background: ${({ theme }) => theme.text};
+    transition: all 0.3s ease;
+    
+    &:first-child {
+      transform: ${({ $isOpen }) =>
+        $isOpen ? 'rotate(45deg) translate(0.5rem, 0.5rem)' : 'rotate(0)'};
+    }
+    
+    &:nth-child(2) {
+      opacity: ${({ $isOpen }) => ($isOpen ? '0' : '1')};
+    }
+    
+    &:last-child {
+      transform: ${({ $isOpen }) =>
+        $isOpen ? 'rotate(-45deg) translate(0.5rem, -0.5rem)' : 'rotate(0)'};
+    }
+  }
 `;
 
 const Navbar = ({ currentTheme, setTheme }: NavbarProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
     <Nav>
       <NavContainer>
-        <NavLinks>
-          <Link to="/">Home</Link>
-          <Link to="/blog">Blog</Link>
-          <Link to="/about">About</Link>
-          <Link to="/links">Links</Link>
+        <HamburgerButton onClick={toggleMenu} $isOpen={isOpen}>
+          <span />
+          <span />
+          <span />
+        </HamburgerButton>
+        <NavLinks $isOpen={isOpen}>
+          <Link to="/" onClick={closeMenu}>Home</Link>
+          <Link to="/blog" onClick={closeMenu}>Blog</Link>
+          <Link to="/about" onClick={closeMenu}>About</Link>
+          <Link to="/links" onClick={closeMenu}>Links</Link>
         </NavLinks>
         <ThemeSelector 
           value={currentTheme} 

@@ -30,11 +30,12 @@ const PageContainer = styled.div`
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 2rem;
+	padding-top: 80px;
 
 	@media (max-width: 768px) {
 		padding: 1rem;
+		padding-top: 80px;
 	}
-	padding-top: 80px;
 `;
 
 function App() {
@@ -42,7 +43,7 @@ function App() {
 
 	return (
 		<ThemeProvider theme={themes[currentTheme]}>
-			<GlobalStyles />
+			<GlobalStyles theme={themes[currentTheme]} />
 			<Router>
 				<AppContainer>
 					<Navbar currentTheme={currentTheme} setTheme={setCurrentTheme} />
