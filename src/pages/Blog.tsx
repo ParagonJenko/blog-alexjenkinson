@@ -83,8 +83,9 @@ const TagList = styled.div`
 `;
 
 const Tag = styled.span`
-	background-color: ${({ theme }) => theme.border};
+	background-color: ${({ theme }) => theme.background};
 	color: ${({ theme }) => theme.text};
+	border: 1px solid ${({ theme }) => theme.border};
 	padding: 0.2em 0.6em;
 	border-radius: 4px;
 	font-size: 0.8em;
