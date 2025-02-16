@@ -86,7 +86,7 @@ const Subtitle = styled.p`
 const CTAButton = styled(Link)`
 	padding: 1rem 2rem;
 	font-size: 1.2rem;
-	background-color: ${({ theme }) => theme.accent};
+	background-color: ${({ theme }) => theme.secondary};
 	color: ${({ theme }) => theme.text};
 	border: none;
 	border-radius: 5px;

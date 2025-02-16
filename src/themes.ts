@@ -60,18 +60,18 @@ const themes: Record<ThemeName, Theme> = {
 		specialAccent: '#d4af37',
 	},
 	dos: {
-		primary: '#000080',
-		secondary: '#000057',
-		text: '#C0C0C0',
-		accent: '#FFFFFF',
-		border: '#808080',
-		background: '#000080',
-		font: '"IBM Plex Mono", "Courier New", monospace',
-		headerFont: '"IBM Plex Mono", "Courier New", monospace',
+		primary: '#001100', // Dark green background
+		secondary: '#001100', // Dark green for secondary
+		text: '#33ff33', // Bright phosphor green
+		accent: '#33ff33', // Same bright green for accents
+		border: '#33ff33', // Green borders
+		background: '#001100', // Dark green background
+		font: '"Perfect DOS VGA 437", "IBM Plex Mono", Consolas, monospace',
+		headerFont: '"Perfect DOS VGA 437", "IBM Plex Mono", Consolas, monospace',
 		backgroundImage: 'url("/dos-bg.jpg")',
-		overlayColor: 'rgba(0, 0, 128, 0.3)',
-		specialAccent: '#FFFF00',
-		textShadow: '0 0 2px rgba(192, 192, 192, 0.8)',
+		overlayColor: 'rgba(0, 17, 0, 0.97)',
+		specialAccent: '#11ff11', // Slightly different green for highlights
+		textShadow: '0 0 2px rgba(51, 255, 51, 0.4)', // Subtle green glow
 	},
 };
 
