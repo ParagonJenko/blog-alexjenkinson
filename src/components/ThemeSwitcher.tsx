@@ -1,6 +1,5 @@
 import { BsTerminalFill } from 'react-icons/bs';
 import { FaSkull } from 'react-icons/fa';
-import { GiStarsStack } from 'react-icons/gi';
 import { IoMdCompass } from 'react-icons/io';
 import styled from 'styled-components';
 import { ThemeName } from '../themes';
@@ -58,7 +57,6 @@ const ThemeSwitcher = ({ currentTheme, setTheme }: ThemeSwitcherProps) => {
 	const themes: { name: ThemeName; icon: JSX.Element; label: string }[] = [
 		{ name: 'dos', icon: <BsTerminalFill />, label: 'DOS' },
 		{ name: 'fallout', icon: <FaSkull />, label: 'Fall' },
-		{ name: 'astrology', icon: <GiStarsStack />, label: 'Astr' },
 		{ name: 'tarkov', icon: <IoMdCompass />, label: 'Tark' },
 	];
 

@@ -19,7 +19,7 @@ A modern, theme-switching blog built with React and TypeScript. Features multipl
 
 ## Features
 
-- Multiple theme support (DOS, Fallout, Astrology, Tarkov)
+- Multiple theme support (DOS, Fallout, Tarkov)
 - Responsive design for all devices
 - DOS terminal-style interface
 - Blog post management

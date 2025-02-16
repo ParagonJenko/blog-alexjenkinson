@@ -14,7 +14,7 @@ export interface Theme {
 }
 
 // Define available theme names
-export type ThemeName = 'fallout' | 'astrology' | 'tarkov' | 'dos';
+export type ThemeName = 'fallout' | 'tarkov' | 'dos';
 
 // Theme configurations
 const themes: Record<ThemeName, Theme> = {
@@ -31,20 +31,6 @@ const themes: Record<ThemeName, Theme> = {
 		overlayColor: 'rgba(57, 12, 6, 0.3)',
 		specialAccent: '#ffd700',
 		textShadow: '0 0 8px rgba(255, 183, 132, 0.6)',
-	},
-	astrology: {
-		primary: '#c4afec',
-		secondary: '#2180c7',
-		text: '#fffcfc',
-		accent: '#fbab75',
-		border: '#1a3dea',
-		background: '#0a1428',
-		font: '"Quicksand", sans-serif',
-		headerFont: '"Cinzel", serif',
-		backgroundImage: 'url("/astrology-bg.jpg")',
-		overlayColor: 'rgba(26, 61, 234, 0.1)',
-		specialAccent: '#fbab75',
-		textShadow: '0 0 12px rgba(196, 175, 236, 0.8)',
 	},
 	tarkov: {
 		primary: '#2a2a2a',
@@ -83,6 +69,5 @@ export const getDefaultTheme = (): Theme => themes.fallout;
 
 // Export individual themes for backward compatibility
 export const falloutTheme = themes.fallout;
-export const astrologyTheme = themes.astrology;
 export const tarkovTheme = themes.tarkov;
 export const dosTheme = themes.dos;
