@@ -8,7 +8,7 @@ tech:
   - Discord.js
   - Node.js
 repository: https://github.com/ideaSquared/ideasquared-bot
-blog_posts: []
+blog_posts: [building-a-discord-bot-with-typescript]
 version: 1.0.0
 status: Active
 ---

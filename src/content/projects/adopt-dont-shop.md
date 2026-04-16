@@ -10,7 +10,7 @@ tech:
   - PostgreSQL
   - Docker
 repository: https://github.com/ideaSquared/adopt-dont-shop
-blog_posts: []
+blog_posts: [building-a-pet-adoption-platform, data-modelling-for-pet-adoption]
 live: https://adoptdontshop.app
 version: 1.0.0
 status: Active
